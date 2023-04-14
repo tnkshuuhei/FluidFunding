@@ -11,7 +11,7 @@ function ConnectButton() {
       isLoading={isAuthLoading}
       onClick={logout}
     >
-      Disconnect: {address}
+      Logout: {address}
     </Button>
   ) : (
     <Button
@@ -19,7 +19,7 @@ function ConnectButton() {
       isLoading={isAuthLoading}
       onClick={login}
     >
-      Connect
+      Login
     </Button>
   );
 }
