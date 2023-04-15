@@ -13,9 +13,11 @@ import {
   Web3AuthAdapter,
   Web3AuthEventListener,
 } from "@safe-global/auth-kit";
+import { Web3Provider } from "@ethersproject/providers";
 
 interface AuthContextInterface {
-  provider: any;
+  provider: Web3Provider | null;
+  signer: any;
   address: string;
   login: () => void;
   logout: () => void;
@@ -44,6 +46,7 @@ const getPrefix = (chainId: string) => {
 
 const AuthContext = React.createContext<AuthContextInterface>({
   provider: null,
+  signer: null,
   address: "",
   login: () => {},
   logout: () => {},
@@ -54,10 +57,17 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const [safeAuthSignInResponse, setSafeAuthSignInResponse] =
     useState<SafeAuthSignInData | null>(null);
   const [safeAuth, setSafeAuth] = useState<SafeAuthKit<Web3AuthAdapter>>();
-  const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
-    null
-  );
+  const [provider, setProvider] = useState<Web3Provider | null>(null);
+  const [signer, setSigner] = useState<any>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+
+  useEffect(() => {
+    if (provider) {
+      setSigner(provider.getSigner());
+    } else {
+      setSigner(null);
+    }
+  }, [provider]);
 
   useEffect(() => {
     (async () => {
@@ -69,7 +79,8 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
         chainConfig: {
           chainNamespace: CHAIN_NAMESPACES.EIP155,
           chainId: "0x1",
-          // rpcTarget: `https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_KEY}`
+          rpcTarget:
+            "https://eth-mainnet.g.alchemy.com/v2/cm5jOMWu7UNU6H_LazPuo3-46sz00ES1",
         },
         uiConfig: {
           theme: "dark",
@@ -137,7 +148,15 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       console.log("SIGN IN RESPONSE: ", response);
 
       setSafeAuthSignInResponse(response);
-      setProvider(safeAuth.getProvider() as SafeEventEmitterProvider);
+      const ethersProvider = new Web3Provider(
+        safeAuth.getProvider() as SafeEventEmitterProvider
+      );
+      setProvider(ethersProvider);
+
+      // Get the signer and display its address
+      const signer = ethersProvider.getSigner();
+      const address = await signer.getAddress();
+      console.log("Signer address: ", address);
     } catch (error: any) {
       console.log("ERROR: auth: ", error.message);
     } finally {
@@ -159,6 +178,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       value={{
         address: safeAuthSignInResponse?.eoa || "",
         provider,
+        signer,
         login,
         logout,
         isAuthLoading,
