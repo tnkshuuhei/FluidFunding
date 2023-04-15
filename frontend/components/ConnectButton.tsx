@@ -1,6 +1,6 @@
-import { APP_CONFIG } from '@/constants';
-import { useAuth } from '@/contexts/auth';
-import { Button } from '@chakra-ui/react';
+import { APP_CONFIG } from "@/constants";
+import { useAuth } from "@/contexts/auth";
+import { Button } from "@chakra-ui/react";
 
 function ConnectButton() {
   const { address, isAuthLoading, login, logout } = useAuth();
