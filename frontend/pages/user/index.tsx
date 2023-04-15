@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import ProjectCard from '@/components/ProjectCard';
-import { getProjects } from '@/utils/external-services/curveGrid';
+import React, { useEffect, useState } from "react";
+import ProjectCard from "@/components/ProjectCard";
+import { getProjects } from "@/utils/external-services/curveGrid";
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    getProjects().then(async (res) => {
+    getProjects().then(async (res: any) => {
       setProjects(
-        res.data.result.map((result) => {
+        res.data.result.map((result: any) => {
           const [sender, name, jsonDataStringified, fundingRecipient] =
             result.event.inputs;
           return {
