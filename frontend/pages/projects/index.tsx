@@ -1,9 +1,7 @@
-// index.tsx
 import React from "react";
-import Header from "@/components/Header";
 import Link from "next/link";
 
-function Projects() {
+function Home() {
   return (
     <>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -22,4 +20,4 @@ function Projects() {
   );
 }
 
-export default Projects;
+export default Home;
