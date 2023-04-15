@@ -8,6 +8,8 @@ function RegisterProject() {
   const [projectDescription, setProjectDescription] = useState("");
   const [bannerImage, setBannerImage] = useState(null);
   const [step, setStep] = useState(1);
+  const [milestoneTitle, setMilestoneTitle] = useState("");
+  const [deadline, setDeadline] = useState("");
 
   const mdParser = new MarkdownIt();
 
@@ -30,7 +32,11 @@ function RegisterProject() {
   const handleBack = () => {
     setStep(step - 1);
   };
-
+  const handleMilestone = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Milestone Title:", milestoneTitle);
+    console.log("Deadline:", deadline);
+  };
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <form
@@ -105,21 +111,53 @@ function RegisterProject() {
 
         {step === 2 && (
           <>
-            <div className="flex justify-between">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 hover:cursor-pointer"
-              >
-                ← Back
-              </button>
-              <button
-                type="submit"
-                className="bg-green-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-600 hover:cursor-pointer"
-              >
-                Confirm
-              </button>
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label
+                  htmlFor="milestoneTitle"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Milestone Title
+                </label>
+                <input
+                  type="text"
+                  id="milestoneTitle"
+                  value={milestoneTitle}
+                  onChange={(e) => setMilestoneTitle(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 text-base text-gray-900"
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="deadline"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Deadline
+                </label>
+                <input
+                  type="date"
+                  id="deadline"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 text-base text-gray-900"
+                />
+              </div>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-600 hover:cursor-pointer"
+                >
+                  ← Back
+                </button>
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-600 hover:cursor-pointer"
+                >
+                  Confirm
+                </button>
+              </div>
+            </form>
           </>
         )}
       </form>
