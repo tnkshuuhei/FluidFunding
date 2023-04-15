@@ -12,11 +12,14 @@ import {
   SafeAuthSignInData,
   Web3AuthAdapter,
   Web3AuthEventListener,
+
 } from '@safe-global/auth-kit';
 import { providers } from 'ethers';
 
+
 interface AuthContextInterface {
-  provider: any;
+  provider: Web3Provider | null;
+  signer: any;
   address: string;
   login: () => void;
   logout: () => void;
@@ -45,7 +48,9 @@ const getPrefix = (chainId: string) => {
 
 const AuthContext = React.createContext<AuthContextInterface>({
   provider: null,
+
   address: '',
+
   login: () => {},
   logout: () => {},
   isAuthLoading: false,
@@ -55,8 +60,18 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const [safeAuthSignInResponse, setSafeAuthSignInResponse] =
     useState<SafeAuthSignInData | null>(null);
   const [safeAuth, setSafeAuth] = useState<SafeAuthKit<Web3AuthAdapter>>();
+
   const [provider, setProvider] = useState<providers.Web3Provider | null>(null);
+
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+
+  useEffect(() => {
+    if (provider) {
+      setSigner(provider.getSigner());
+    } else {
+      setSigner(null);
+    }
+  }, [provider]);
 
   useEffect(() => {
     (async () => {
@@ -69,6 +84,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
           chainNamespace: CHAIN_NAMESPACES.EIP155,
           chainId: '0x5',
           rpcTarget: `https://goerli.infura.io/v3/523f349175754736998911b8e4e3b3ff`,
+
         },
         uiConfig: {
           theme: 'dark',
@@ -136,8 +152,10 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       console.log('SIGN IN RESPONSE: ', response);
 
       setSafeAuthSignInResponse(response);
+
       console.log('provider', safeAuth.getProvider());
       setProvider(safeAuth.getProvider() as any);
+
     } catch (error: any) {
       console.log('ERROR: auth: ', error.message);
     } finally {
@@ -159,6 +177,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       value={{
         address: safeAuthSignInResponse?.eoa || '',
         provider,
+        signer,
         login,
         logout,
         isAuthLoading,
