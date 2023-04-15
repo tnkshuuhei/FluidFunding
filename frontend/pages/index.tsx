@@ -15,8 +15,8 @@ import {
   HStack,
   VStack,
 } from "@chakra-ui/react";
-
 import {
+  IoConstructSharp,
   IoAnalyticsSharp,
   IoLogoBitcoin,
   IoSearchSharp,
@@ -89,7 +89,7 @@ export default function Home() {
           >
             Product Feature
           </Text>
-          <Heading>Perpetual Public Funding Protocol(PPFG)</Heading>
+          <Heading>Perpetual Public Funding Protocol</Heading>
           <Text color={"gray.500"} fontSize={"lg"}>
             PPFG is a decentralized funding protocol that allows users to create
             and fund projects and receive funding continuously from the
@@ -148,61 +148,38 @@ export default function Home() {
         >
           <Heading fontSize={"3xl"}>Tech Stack behind PPFP</Heading>
           <Text color={"gray.600"} fontSize={"xl"}>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua.
+            PPFP is built on top of Ethereum Blockchain and other public
+            blockchain
           </Text>
         </Stack>
       </Box>
-      <Box p={4}>
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+      <Box p={4} className="justify-center">
+        <SimpleGrid columns={{ base: 1, md: 4 }} spacing={10}>
           <Techstack
-            icon={<Icon as={FcAssistant} w={10} h={10} />}
-            title={"Lifetime Support"}
-            text={
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-            }
+            icon={<Icon as={IoConstructSharp} w={10} h={10} />}
+            title={"UMA Optimistic Oracle"}
+            text={""}
           />
           <Techstack
-            icon={<Icon as={FcDonate} w={10} h={10} />}
-            title={"Unlimited Donations"}
-            text={
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-            }
+            icon={<Icon as={IoConstructSharp} w={10} h={10} />}
+            title={"Superfluid SDK"}
+            text={""}
           />
           <Techstack
-            icon={<Icon as={FcInTransit} w={10} h={10} />}
-            title={"Instant Delivery"}
-            text={
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-            }
+            icon={<Icon as={IoConstructSharp} w={10} h={10} />}
+            title={"Safe SDK"}
+            text={""}
           />
           <Techstack
-            icon={<Icon as={FcAssistant} w={10} h={10} />}
-            title={"Lifetime Support"}
-            text={
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-            }
-          />
-          <Techstack
-            icon={<Icon as={FcDonate} w={10} h={10} />}
-            title={"Unlimited Donations"}
-            text={
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-            }
-          />
-          <Techstack
-            icon={<Icon as={FcInTransit} w={10} h={10} />}
-            title={"Instant Delivery"}
-            text={
-              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
-            }
+            icon={<Icon as={IoConstructSharp} w={10} h={10} />}
+            title={"curvegrid"}
+            text={""}
           />
         </SimpleGrid>
       </Box>
       <Box p={4}>
         <Stack
-          pt={20}
+          pt={10}
           spacing={4}
           as={Container}
           maxW={"3xl"}
@@ -210,9 +187,15 @@ export default function Home() {
         >
           <Heading fontSize={"3xl"}>How it works?</Heading>
           <Text color={"gray.600"} fontSize={"xl"}>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua.
+            - Project uses smart contracts to register projects - User creates
+            PredictionMarket through UMA-based smart contract. Project predicts
+            whether the project will meet its milestones. - Quadratic Funding
+            Formula determines the Distribution amount based on the
+            PredictionMarket Volume. - Grant is allocated according to the
+            Distribution amount. Each project will use Superfluid to distribute
+            funds until the milestone is reached. - UMA oSnap will be utilized
+            during this period, and any irregularities will be reported and
+            investigated.
           </Text>
         </Stack>
       </Box>
