@@ -1,24 +1,39 @@
-import React from "react";
-import ProjectCard from "@/components/ProjectCard";
+import React, { useEffect, useState } from 'react';
+import ProjectCard from '@/components/ProjectCard';
+import { getProjects } from '@/utils/external-services/curveGrid';
 
 const Home = () => {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    getProjects().then(async (res) => {
+      setProjects(
+        res.data.result.map((result) => {
+          const [sender, name, jsonDataStringified, fundingRecipient] =
+            result.event.inputs;
+          return {
+            sender: sender.value,
+            name: name.value,
+            fundingRecipient: fundingRecipient.value,
+            data: JSON.parse(jsonDataStringified.value),
+          };
+        })
+      );
+    });
+  }, []);
+
   return (
     <div className="p-14 w-full flex flex-wrap justify-center">
-      <ProjectCard
-        title="Ethereum Foundation"
-        description="The Ethereum Foundation is a Swiss nonprofit, based in Zug, Switzerland. It was established in 2014 to support the development of Ethereum and related technologies."
-        price={450}
-      />
-      <ProjectCard
-        title="Ethereum Foundation"
-        description="The Ethereum Foundation is a Swiss nonprofit, based in Zug, Switzerland. It was established in 2014 to support the development of Ethereum and related technologies."
-        price={450}
-      />
-      <ProjectCard
-        title="Ethereum Foundation"
-        description="The Ethereum Foundation is a Swiss nonprofit, based in Zug, Switzerland. It was established in 2014 to support the development of Ethereum and related technologies."
-        price={450}
-      />
+      {projects.map((project: any, idx) => {
+        return (
+          <ProjectCard
+            key={idx}
+            title={project.name}
+            description={project.data?.description}
+            price={450}
+          />
+        );
+      })}
     </div>
   );
 };

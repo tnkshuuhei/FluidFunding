@@ -1,15 +1,21 @@
-import React, { useState } from "react";
-import MarkdownIt from "markdown-it";
-import { Progress } from "@chakra-ui/react";
-import { Textarea } from "@chakra-ui/react";
+import React, { useState } from 'react';
+import MarkdownIt from 'markdown-it';
+import { Progress } from '@chakra-ui/react';
+import { Textarea } from '@chakra-ui/react';
+import { getContract } from '@/utils/contract';
+import { GRANT_CONTRACT_ADDRESS } from '@/utils/constants';
+import { useAuth } from '@/contexts/auth';
+
+import grantAbi from '../../utils/abis/grant.json';
 
 function RegisterProject() {
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
+  const [projectName, setProjectName] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
   const [bannerImage, setBannerImage] = useState(null);
   const [step, setStep] = useState(1);
-  const [milestoneTitle, setMilestoneTitle] = useState("");
-  const [deadline, setDeadline] = useState("");
+  const [milestoneTitle, setMilestoneTitle] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const { provider } = useAuth();
 
   const mdParser = new MarkdownIt();
 
@@ -18,11 +24,26 @@ function RegisterProject() {
     setBannerImage(file);
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log("Project Name:", projectName);
-    console.log("Project Description:", projectDescription);
-    console.log("Banner Image:", bannerImage);
+    console.log('Project Name:', projectName);
+    console.log('Project Description:', projectDescription);
+    console.log('Banner Image:', bannerImage);
+
+    const contract = await getContract(
+      grantAbi,
+      GRANT_CONTRACT_ADDRESS,
+      provider
+    );
+    console.log('contract', contract, await contract.totalProject());
+    await contract
+      .registerProject(
+        projectName,
+        '{}',
+        '0xE8B0a2B0Ec112294E6c43cdfDe0Ead401be581e9',
+        Math.floor(new Date().getTime() / 1000)
+      )
+      .then((tx: any) => tx.wait());
   };
 
   const handleNext = () => {
@@ -34,8 +55,8 @@ function RegisterProject() {
   };
   const handleMilestone = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Milestone Title:", milestoneTitle);
-    console.log("Deadline:", deadline);
+    console.log('Milestone Title:', milestoneTitle);
+    console.log('Deadline:', deadline);
   };
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -151,7 +172,8 @@ function RegisterProject() {
                   ← Back
                 </button>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit}
                   className="bg-green-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-600 hover:cursor-pointer"
                 >
                   Confirm
