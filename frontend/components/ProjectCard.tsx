@@ -17,7 +17,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const router = useRouter();
 
   return (
-    <div className="bg-white shadow-md rounded-lg max-w-sm">
+    <div className="bg-white shadow-md rounded-lg max-w-sm mx-5 my-4">
       <div className="relative h-64">
         <Image
           src="/next.svg"
