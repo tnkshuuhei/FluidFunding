@@ -152,7 +152,7 @@ contract Grant is Ownable {
     function _getFirstPartOfGrantRate(
         uint256 projectId
     ) internal view returns (uint256) {
-        uint256 streamPeriodInSecond = block.timestamp <=
+        uint256 streamPeriodInSecond = block.timestamp >
             projectMapping[projectId].milestoneTimestamp
             ? block.timestamp - projectMapping[projectId].milestoneTimestamp
             : 1;
