@@ -1,9 +1,9 @@
-import React from "react";
-import ProjectCard from "@/components/ProjectCard";
-const Home = () => {
+import ProjectDetail from "../../components/ProjectDetail";
+
+const ProjectDetailPage = () => {
   return (
-    <div className="p-14 w-max flex flex-col">
-      <ProjectCard
+    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+      <ProjectDetail
         title="Ethereum Foundation"
         description="The Ethereum Foundation is a Swiss nonprofit, based in Zug, Switzerland. It was established in 2014 to support the development of Ethereum and related technologies."
         price={450}
@@ -12,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ProjectDetailPage;

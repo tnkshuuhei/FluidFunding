@@ -6,14 +6,13 @@ type ProjectCardProps = {
   title: string;
   description: string;
   price: number;
-  imageUrl: string;
+  // imageUrl: string;
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   title,
   description,
   price,
-  imageUrl,
 }) => {
   const router = useRouter();
 
@@ -37,7 +36,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className="p-4 flex justify-between">
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded-md"
-            onClick={() => router.push("/buy")}
+            onClick={() => router.push("/user/projectdetail")}
           >
             Check detail
           </button>
