@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.8;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -79,15 +79,22 @@ contract Grant is Ownable {
         remainingFundWaitTimeInSecond = _remainingFundWaitTimeInSecond;
     }
 
+    function withdraw(address token, uint256 amount) public onlyOwner {
+        IERC20(token).safeTransfer(msg.sender, amount);
+    }
+
     function depositGrant(uint256 depositAmount) public {
         grantToken.safeTransferFrom(msg.sender, address(this), depositAmount);
+        grantToken.approve(address(superToken), depositAmount);
+        superToken.upgrade(depositAmount);
         emit DepositedGrant(msg.sender, depositAmount);
     }
 
     function registerProject(
         string memory name,
         string memory dataJsonStringified,
-        address fundingRecipient
+        address fundingRecipient,
+        uint256 milestoneTimestamp
     ) public {
         uint256 projectId = totalProject++;
         projectMapping[projectId] = Project(
@@ -95,7 +102,7 @@ contract Grant is Ownable {
             msg.sender,
             0,
             dataJsonStringified,
-            block.timestamp,
+            milestoneTimestamp,
             fundingRecipient,
             0
         );
@@ -122,6 +129,18 @@ contract Grant is Ownable {
         emit ApprovedProjects(projectIds, approvedGrantForProject);
     }
 
+    function _getFirstPartOfGrantWithdrawable(
+        uint256 projectId
+    ) internal returns (uint256) {
+        uint256 remainingAmount = _getRemainingGrantWithdrawable(projectId);
+        if (remainingAmount == 0) {
+            return 0;
+        }
+
+        Project memory project = projectMapping[projectId];
+        return (remainingAmount * firstWithdrawalPortion) / 100;
+    }
+
     function _getRemainingGrantWithdrawable(
         uint256 projectId
     ) internal returns (uint256) {
@@ -136,7 +155,8 @@ contract Grant is Ownable {
             projectMapping[projectId].milestoneTimestamp
             ? block.timestamp - projectMapping[projectId].milestoneTimestamp
             : 1;
-        return _getRemainingGrantWithdrawable(projectId) / streamPeriodInSecond;
+        return
+            _getFirstPartOfGrantWithdrawable(projectId) / streamPeriodInSecond;
     }
 
     function startFirstPortionOfTheGrantDistribution(uint256 projectId) public {
