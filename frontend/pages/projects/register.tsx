@@ -11,13 +11,13 @@ function RegisterProject() {
 
   const mdParser = new MarkdownIt();
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = (event: any) => {
+    const file = event.target.files[0];
     setBannerImage(file);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
     console.log("Project Name:", projectName);
     console.log("Project Description:", projectDescription);
     console.log("Banner Image:", bannerImage);
