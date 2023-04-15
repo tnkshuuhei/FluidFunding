@@ -21,6 +21,7 @@ contract Grant is Ownable {
         uint256 milestoneTimestamp;
         address fundingRecipient;
         uint256 totalFundReceived;
+        bool isStopped;
     }
 
     struct ActiveFundStream {
@@ -104,7 +105,8 @@ contract Grant is Ownable {
             dataJsonStringified,
             milestoneTimestamp,
             fundingRecipient,
-            0
+            0,
+            false
         );
 
         emit RegisteredProject(
@@ -131,26 +133,25 @@ contract Grant is Ownable {
 
     function _getFirstPartOfGrantWithdrawable(
         uint256 projectId
-    ) internal returns (uint256) {
+    ) internal view returns (uint256) {
         uint256 remainingAmount = _getRemainingGrantWithdrawable(projectId);
         if (remainingAmount == 0) {
             return 0;
         }
 
-        Project memory project = projectMapping[projectId];
         return (remainingAmount * firstWithdrawalPortion) / 100;
     }
 
     function _getRemainingGrantWithdrawable(
         uint256 projectId
-    ) internal returns (uint256) {
+    ) internal view returns (uint256) {
         Project memory project = projectMapping[projectId];
         return (project.approvedGrant - project.totalFundReceived);
     }
 
     function _getFirstPartOfGrantRate(
         uint256 projectId
-    ) internal returns (uint256) {
+    ) internal view returns (uint256) {
         uint256 streamPeriodInSecond = block.timestamp <=
             projectMapping[projectId].milestoneTimestamp
             ? block.timestamp - projectMapping[projectId].milestoneTimestamp
@@ -195,6 +196,7 @@ contract Grant is Ownable {
                 lastActiveStreamOfProject.startTimestamp) *
                 uint256(lastActiveStreamOfProject.rate);
             projectMapping[projectId].totalFundReceived = amountReceived;
+            projectMapping[projectId].isStopped = true;
 
             delete lastActiveFundStream[projectId];
 
@@ -210,6 +212,10 @@ contract Grant is Ownable {
     ) public onlyDao {
         // stop grant stream of the first fund portion to the fund recipient of the projects
         // this function is to be executed by Snapshot DAO if someone finding something is bad on the project
+        require(
+            block.timestamp <= _getProjectFinalWithdarawalTime(projectId),
+            "only before finalization period"
+        );
 
         //stop
         _stopFirstPortionOfTheGrantDistribution(projectId);
@@ -231,18 +237,25 @@ contract Grant is Ownable {
             block.timestamp,
             rate
         );
+        projectMapping[projectId].isStopped = true;
 
         superToken.createFlow(project.fundingRecipient, int96(uint96(rate)));
 
         emit ResumedFirstPortionOfTheGrantDistribution(projectId);
     }
 
+    function _getProjectFinalWithdarawalTime(
+        uint256 projectId
+    ) internal view returns (uint256) {
+        return
+            projectMapping[projectId].milestoneTimestamp +
+            remainingFundWaitTimeInSecond;
+    }
+
     function sendTheRemainingFundGrant(uint256 projectId) public {
         // send the remaining fund grant for the project
         require(
-            block.timestamp >=
-                projectMapping[projectId].milestoneTimestamp +
-                    remainingFundWaitTimeInSecond,
+            block.timestamp >= _getProjectFinalWithdarawalTime(projectId),
             "can not withdraw yet"
         );
 
@@ -251,5 +264,9 @@ contract Grant is Ownable {
         uint256 amount = _getRemainingGrantWithdrawable(projectId);
 
         emit SentTheRemainingFundGrant(projectId, amount);
+    }
+
+    function isProjectSuccessful(uint256 projectId) public view returns (bool) {
+        return block.timestamp > _getProjectFinalWithdarawalTime(projectId);
     }
 }
