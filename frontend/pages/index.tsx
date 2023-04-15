@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
-import ConnectButton from "@/components/ConnectButton";
-import Header from "@/components/Header";
+import { FcAssistant, FcDonate, FcInTransit } from "react-icons/fc";
 import {
   Container,
   SimpleGrid,
@@ -12,7 +11,11 @@ import {
   StackDivider,
   Icon,
   useColorModeValue,
+  Box,
+  HStack,
+  VStack,
 } from "@chakra-ui/react";
+
 import {
   IoAnalyticsSharp,
   IoLogoBitcoin,
@@ -40,6 +43,32 @@ const Feature = ({ text, icon, iconBg }: FeatureProps) => {
         {icon}
       </Flex>
       <Text fontWeight={600}>{text}</Text>
+    </Stack>
+  );
+};
+interface TechProp {
+  title: string;
+  text: string;
+  icon: ReactElement;
+}
+
+const Techstack = ({ title, text, icon }: TechProp) => {
+  return (
+    <Stack>
+      <Flex
+        w={16}
+        h={16}
+        align={"center"}
+        justify={"center"}
+        color={"white"}
+        rounded={"full"}
+        bg={"gray.100"}
+        mb={1}
+      >
+        {icon}
+      </Flex>
+      <Text fontWeight={600}>{title}</Text>
+      <Text color={"gray.600"}>{text}</Text>
     </Stack>
   );
 };
@@ -104,13 +133,73 @@ export default function Home() {
           <Image
             rounded={"md"}
             alt={"feature image"}
-            src={
-              "https://images.unsplash.com/photo-1554200876-56c2f25224fa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            }
+            src={"https://wtfisqf.com/logo.gif"}
             objectFit={"cover"}
           />
         </Flex>
       </SimpleGrid>
+      <Box p={4}>
+        <Stack
+          pt={20}
+          spacing={4}
+          as={Container}
+          maxW={"3xl"}
+          textAlign={"center"}
+        >
+          <Heading fontSize={"3xl"}>Tech Stack behind PPFP</Heading>
+          <Text color={"gray.600"} fontSize={"xl"}>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+            erat, sed diam voluptua.
+          </Text>
+        </Stack>
+      </Box>
+      <Box p={4}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+          <Techstack
+            icon={<Icon as={FcAssistant} w={10} h={10} />}
+            title={"Lifetime Support"}
+            text={
+              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
+            }
+          />
+          <Techstack
+            icon={<Icon as={FcDonate} w={10} h={10} />}
+            title={"Unlimited Donations"}
+            text={
+              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
+            }
+          />
+          <Techstack
+            icon={<Icon as={FcInTransit} w={10} h={10} />}
+            title={"Instant Delivery"}
+            text={
+              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
+            }
+          />
+          <Techstack
+            icon={<Icon as={FcAssistant} w={10} h={10} />}
+            title={"Lifetime Support"}
+            text={
+              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
+            }
+          />
+          <Techstack
+            icon={<Icon as={FcDonate} w={10} h={10} />}
+            title={"Unlimited Donations"}
+            text={
+              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
+            }
+          />
+          <Techstack
+            icon={<Icon as={FcInTransit} w={10} h={10} />}
+            title={"Instant Delivery"}
+            text={
+              "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore..."
+            }
+          />
+        </SimpleGrid>
+      </Box>
     </Container>
   );
 }
