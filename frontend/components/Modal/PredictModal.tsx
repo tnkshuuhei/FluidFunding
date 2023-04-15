@@ -8,6 +8,9 @@ type CustomModalProps = {
 
 const PredictionModal: React.FC<CustomModalProps> = ({ isOpen, onClose }) => {
   const [amount, setAmount] = useState("");
+  const [selectedOption, setSelectedOption] = useState<"yes" | "no" | null>(
+    null
+  );
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -18,24 +21,41 @@ const PredictionModal: React.FC<CustomModalProps> = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const handleOptionClick = (option: "yes" | "no") => {
+    setSelectedOption(option);
+  };
+
   if (!isOpen) {
     return null;
   }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
       <div className="bg-white rounded-lg w-full max-w-md">
         <div className="p-4">
-          <div className="flex justify-between">
+          <h2 className="text-2xl font-semibold text-center my-3">
+            Predict & Deposit
+          </h2>
+          <h3 className="text-lg font-semibold text-center">
+            Will they achieve their mileston till XX/XX/XX?
+          </h3>
+          <div className="flex justify-between my-3">
             <button
-              className="bg-green-500 text-white px-4 py-2 rounded-md"
-              onClick={() => console.log("Yes")}
+              className={`w-1/2 px-4 py-2 rounded-md ${
+                selectedOption === "yes"
+                  ? "bg-green-500 text-white"
+                  : "bg-green-300 text-green-700"
+              }`}
+              onClick={() => handleOptionClick("yes")}
             >
               YES
             </button>
             <button
-              className="bg-red-500 text-white px-4 py-2 rounded-md"
-              onClick={() => console.log("No")}
+              className={`w-1/2 px-4 py-2 rounded-md ${
+                selectedOption === "no"
+                  ? "bg-red-500 text-white"
+                  : "bg-red-300 text-red-700"
+              }`}
+              onClick={() => handleOptionClick("no")}
             >
               NO
             </button>
