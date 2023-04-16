@@ -53,7 +53,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
             className="bg-green-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-600 hover:cursor-pointer"
             onClick={handleOpenModal}
           >
-            Deposit
+            Predict & Deposit
           </button>
           <PredictionModal isOpen={isModalOpen} onClose={handleCloseModal} />
         </div>

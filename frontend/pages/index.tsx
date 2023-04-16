@@ -186,32 +186,7 @@ export default function Home() {
           textAlign={"center"}
         >
           <Heading fontSize={"3xl"}>How it works?</Heading>
-          <Text color={"gray.600"} fontSize={"xl"}>
-            <ul>
-              <li>1. Project uses smart contracts to register projects </li>
-              <li>
-                2. User creates PredictionMarket through UMA-based smart
-                contract. Project predicts whether the project will meet its
-                milestones.{" "}
-              </li>
-              <li>
-                {" "}
-                3. Quadratic Funding Formula determines the Distribution amount
-                based on the PredictionMarket Volume.
-              </li>
-              <li>
-                {" "}
-                4. Grant is allocated according to the Distribution amount. Each
-                project will use Superfluid to distribute funds until the
-                milestone is reached.{" "}
-              </li>
-              <li>
-                5. UMA oSnap will be utilized during this period, and any
-                irregularities will be proposed and can stop the fund stream of
-                the project.{" "}
-              </li>
-            </ul>
-          </Text>
+          <Image src={"/flow.png"} />
         </Stack>
       </Box>
       <div className=" justify-center flex flex-col"></div>
