@@ -149,7 +149,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const logoutWIthMetamask = async () => {
     setProvider(null);
-    setSafeAuthSignInResponse({});
+    setSafeAuthSignInResponse({} as any);
   };
 
   const login = async () => {

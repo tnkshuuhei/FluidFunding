@@ -57,7 +57,7 @@ const Home = () => {
     }
 
     // Set url parameters
-    history.pushState({}, null, urlParams);
+    history.pushState({}, null as any, urlParams);
 
     // // Set new data
     // setData([...newData]);
