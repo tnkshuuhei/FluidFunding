@@ -21,6 +21,8 @@ interface AuthContextInterface {
   login: () => void;
   logout: () => void;
   isAuthLoading: boolean;
+  loginWithMetamask: () => void;
+  loggedInWith: string;
 }
 
 const connectedHandler: Web3AuthEventListener = (data) =>
@@ -51,6 +53,9 @@ const AuthContext = React.createContext<AuthContextInterface>({
   login: () => {},
   logout: () => {},
   isAuthLoading: false,
+
+  loginWithMetamask: () => {},
+  loggedInWith: "",
 });
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
@@ -61,6 +66,8 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const [provider, setProvider] = useState<providers.Web3Provider | null>(null);
 
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+
+  const [loggedInWith, setLoggedIn] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -131,8 +138,24 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     })();
   }, []);
 
+  const loginWithMetamask = async () => {
+    setLoggedIn("metamask");
+    const provider = new providers.Web3Provider((window as any).ethereum);
+    const accounts = await provider.send("eth_requestAccounts", []);
+
+    setProvider(provider);
+    setSafeAuthSignInResponse({ eoa: accounts[0] });
+  };
+
+  const logoutWIthMetamask = async () => {
+    setProvider(null);
+    setSafeAuthSignInResponse({});
+  };
+
   const login = async () => {
     if (!safeAuth) return;
+
+    setLoggedIn("safe");
 
     setIsAuthLoading(true);
     try {
@@ -151,12 +174,12 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   };
 
   const logout = async () => {
+    setLoggedIn("");
+    setProvider(null);
+    setSafeAuthSignInResponse(null);
     if (!safeAuth) return;
 
     await safeAuth.signOut();
-
-    setProvider(null);
-    setSafeAuthSignInResponse(null);
   };
 
   return (
@@ -167,6 +190,8 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
         login,
         logout,
         isAuthLoading,
+        loginWithMetamask,
+        loggedInWith,
       }}
     >
       {children}

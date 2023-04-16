@@ -89,7 +89,7 @@ export default function Home() {
           >
             Product Feature
           </Text>
-          <Heading>Perpetual Public Funding Protocol</Heading>
+          <Heading>FluidFunding - Perpetual Public Funding Protocol</Heading>
           <Text color={"gray.500"} fontSize={"lg"}>
             PPFG is a decentralized funding protocol that allows users to create
             and fund projects and receive funding continuously from the

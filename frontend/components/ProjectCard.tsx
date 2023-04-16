@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { Button } from "@chakra-ui/react";
 
 type ProjectCardProps = {
   title: string;
@@ -30,7 +31,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <div className="p-6">
         <h2 className="text-lg font-semibold mb-4">{title}</h2>
         <p className="text-gray-600 mb-4">{description}</p>
-        <p className="text-blue-600 text-2xl mb-4">${price}</p>
+        {/* <p className="text-blue-600 text-2xl mb-4">${price}</p> */}
       </div>
       <div className="border-t border-gray-200">
         <div className="p-4 flex justify-between">

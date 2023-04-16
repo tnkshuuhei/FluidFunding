@@ -19,7 +19,7 @@ function ConnectButton() {
       isLoading={isAuthLoading}
       onClick={login}
     >
-      Login
+      Login With Safe
     </Button>
   );
 }

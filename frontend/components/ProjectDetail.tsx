@@ -39,7 +39,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
       <div className="p-6">
         <h2 className="text-2xl font-semibold mb-4">{title}</h2>
         <p className="text-gray-600 mb-4">{description}</p>
-        <p className="text-blue-600 text-3xl mb-4">Funded: ${price}</p>
+        {/* <p className="text-blue-600 text-3xl mb-4">Funded: ${price}</p> */}
       </div>
       <div className="border-t border-gray-200">
         <div className="p-4 flex justify-between">
